@@ -1,0 +1,9 @@
+@start
+  if (?product(?my_id)>?demand)|(?product(?my_id)=?demand) then
+    sell ?demand ?production_price;
+  if ?product(?my_id)<?demand then
+    sell ?product(?my_id) ?production_price;
+  buy 2 ?raw_price;
+  prod 2;
+  endturn;
+  goto @start;

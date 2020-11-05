@@ -1,0 +1,25 @@
+@start
+  $sum:=0;
+  $pl_num:=1;
+@cycle1
+  {
+    if ?alive($pl_num) then
+      $sum:=$sum+?product($pl_num);
+   $pl_num:=$pl_num+1;
+  }
+  if $pl_num<?players then
+    goto @cycle1;
+
+  if ?product(?my_id)>?demand then
+    $to_sell:=?demand;
+  if (?product(?my_id)<?demand)|(?product(?my_id)=?demand) then
+    $to_sell:=?product(?my_id);
+
+  if ($sum<?demand)|($sum=?demand) then
+    sell $to_sell ?production_price;
+  if ($sum>?demand) then
+     sell $to_sell ?production_price-100;
+  buy 2 ?raw_price;
+  prod 2;
+  endturn;
+  goto @start;

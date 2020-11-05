@@ -1,0 +1,36 @@
+$res:=0;
+$i:=0;
+  $buy_pr_num:=2;
+  $best_pr_change:=?production_price;
+@start
+
+  $pl_num:=1;
+@cycle_change_prod_price
+  {
+    $change:=?production_price-?result_prod_price($pl_num);
+    if ($change<$best_pr_change)&
+       ($buy_pr_num>?result_prod_sold($pl_num)-1) then
+      $best_pr_change:=$change;
+    print "\nchange=", $change, "\n";
+    $pl_num:=$pl_num+1;
+  }
+  if $pl_num<?players then
+    goto @cycle_change_prod_price;
+  print "\nbest change=", $best_pr_change, "\n";
+
+  if (?raw(?my_id)<3) then
+    buy 2 ?raw_price;
+  sell ?product(?my_id) ?production_price;
+  prod ?factories(?my_id);
+  $res:=((?money(?my_id)>20000)&(?factories(?my_id)<3));
+  if ($res=1)&($i=0) then
+  { 
+    $i:=1;
+    build 1;
+  }
+  endturn;
+  $buy_pr_num:=1;
+  $best_pr_change:=?production_price;
+  goto @start;
+
+
